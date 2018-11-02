@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block page %}{{title}}{% endblock %}
+{% block heading %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<br>
+<div id="setmap"></div>
+    <h1>Flask + Leaflet</h1>
+    <h1>Hello {{ username }}</h1>
+    {% if session['username'] == 'Admin' %}
+    <div class="container">
+    <form id="place-search" action="/city" method="post">
+        <div class="form-group row">
+        <div class="col-xs-8">
+            <label for="city">City Name</label>
+            <input type="text" id="city" class="form-control" name="city">
+        </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Search</button>
+    </form>
+</div>
+ {% else %}
+    <div>
+          {% for city in cities %}
+            <p>{{ city.city}}</p>
+            <p>{{ city.lat}}</p>
+            <p>{{city.lon}}</p>
+            <p>{{ city.type}}</p>
+          {% endfor %}
+    </div>
+{% endif %}
+    <script src="{{url_for('static', filename='js/map.js')}}"></script>
+{% endblock %}

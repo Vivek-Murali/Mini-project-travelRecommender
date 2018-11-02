@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block page %}{{title}}{% endblock %}
+{% block heading %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<br/>
+<div class="container"><h3>Hello,<span style="color:blue"><img src="{{ avatars.gravatar(picture, size=20) }}">  {{ username }}</span></h3>
+     <h4>What kind of recommendations you want this {{Time}}??</h4></div>
+
+<br/>
+    <br/>
+    <div class="container">
+    <div class="col-md-1"></div>
+<a href="#"><div class="col-md-10 jumbotron" style="background-image: url({{ url_for('static', filename='img/pu_img.jpeg') }});background-size: cover; background-repeat: no-repeat;">
+    <br/>
+    <br/>
+    <span style="text-align:center; font-style:italic; color:black;"> <h4>Public Travel Recommendations</h4></span>
+    <br/>
+</div></a>
+    <div class="col-md-1"></div>
+</div>
+
+     <div class="container">
+    <div class="col-md-1"></div>
+  <a href="/travel"> <div class="col-md-10 jumbotron" style="background-image: url({{ url_for('static', filename='img/pr_img.jpg') }});background-size: cover; background-repeat: no-repeat;">
+    <br/>
+    <br/>
+    <span style="text-align:center; font-style:italic; color:black;"> <h4>Private Travel Recommendations</h4></span>
+    <br/>
+  </div>
+    <div class="col-md-1"></div>
+</div>
+
+{% endblock %}
+

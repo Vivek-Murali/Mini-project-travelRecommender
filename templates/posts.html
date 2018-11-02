@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+  {{ super() }}
+<style>
+    body {
+  background: url('../img/bg.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+}
+</style>
+{% endblock %}
+{% block page %}{{title}}{% endblock %}
+{% block heading %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h2 style="color:#ff8d00;" name="title"> Topic Title: {{ topic_title }}</h2>
+    <div class="container">
+    <form id="new-post" action="/new_post/{{ topic_id }}" method="post">
+        <div class="form-group row">
+        <div class="col-xs-8">
+            <label for="content">Content</label>
+            <textarea id="content" class="form-control" name="content"></textarea>
+        </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Publish</button>
+    </form>
+</div>
+    <br>
+    <hr>
+    {% if posts|length > 0 %}
+        {% for post in posts %}
+            <img src="{{ avatars.gravatar(post.picture, size=30)  }}" >
+            <p>{{ post.username}}</p>
+            <p>{{ post.message}}</p>
+            <p>{{post.date_posted}}</p>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <h4>There aren't any posts yet!</h4>
+    {% endif %}
+</div>
+{% endblock %}

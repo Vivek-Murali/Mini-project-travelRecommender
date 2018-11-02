@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block page %}{{title}}{% endblock %}
+{% block heading %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<br>
+<div id="setmap"></div>
+    <h1>List of Cities </h1>S
+    <div>
+          {% for city in cities %}
+            <a  href="/place_map/{{ city.city }}" ><h3>{{ city.city}}</h3></a>
+          {% endfor %}
+    </div>
+    <script src="{{url_for('static', filename='js/map.js')}}"></script>
+{% endblock %}

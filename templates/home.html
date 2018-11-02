@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block page %}{{title}}{% endblock %}
+{% block heading %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<br/>
+<div class="container"><h3>Hello,<span style="color:blue"><img src="{{ avatars.gravatar(picture, size=20) }}">  {{ username }}</span></h3>
+     <h4>What kind of recommendations you want this {{Time}}??</h4></div>
+
+<br/>
+    <br/>
+    <div class="container">
+    <div class="col-md-1"></div>
+<a href="/food_rec"><div class="col-md-10 jumbotron" style="background-image: url({{ url_for('static', filename='img/food_img.jpg') }});background-size: cover; background-repeat: no-repeat;">
+    <br/>
+    <br/>
+    <span style="text-align:center; font-style:italic; color:black;"> <h4>Food Recommendations</h4></span>
+    <br/>
+</div></a>
+    <div class="col-md-1"></div>
+</div>
+
+     <div class="container">
+    <div class="col-md-1"></div>
+  <a href="/travel_choice"> <div class="col-md-10 jumbotron" style="background-image: url({{ url_for('static', filename='img/trave_img.jpg') }});background-size: cover; background-repeat: no-repeat;">
+    <br/>
+    <br/>
+    <span style="text-align:center; font-style:italic; color:black;"> <h4>Travel Recommendations</h4></span>
+    <br/>
+  </div>
+    <div class="col-md-1"></div>
+</div>
+
+     <div class="container">
+    <div class="col-md-1"></div>
+  <a href="/city_map1"><div class="col-md-10 jumbotron" style="background-image: url({{ url_for('static', filename='img/hotel_img.jpg') }});background-size: cover; background-repeat: no-repeat;">
+    <br/>
+    <br/>
+     <span style="text-align:center; font-style:italic; color:black;"> <h4>Hotel Recommendations</h4></span>
+    <br/>
+  </div>
+    <div class="col-md-1"></div>
+</div>
+
+     <div class="container">
+    <div class="col-md-1"></div>
+  <a href="/city_map"><<div class="col-md-10 jumbotron" style="background-image: url({{ url_for('static', filename='img/poi_img.jpg') }});background-size: cover; background-repeat: no-repeat;">
+    <br/>
+    <br/>
+    <span style="text-align:center; font-style:italic; color:black;"> <h4>Place Recommendations</h4></span>
+    <br/>
+  </div>
+    <div class="col-md-1"></div>
+</div>
+
+<div class="container">
+    <div class="col-md-1"></div>
+   <a href="/city_map2"><div class="col-md-10 jumbotron" style="background-image: url({{ url_for('static', filename='img/rest_img.jpg') }});background-size: cover; background-repeat: no-repeat;">
+    <br/>
+    <br/>
+    <span style="text-align:center; font-style:italic; color:black;"> <h4>Restaurant Recommendations</h4></span>
+    <br/>
+  </div>
+    <div class="col-md-1"></div>
+</div>
+
+{% endblock %}
+

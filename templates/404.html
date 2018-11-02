@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block page %}{{title}}{% endblock %}
+{% block heading %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<h1>404</h1>
+<p>Sorry, that page does not exist.</p>
+<p><a href="{{ url_for('index_template') }}">Try Again</a></p>
+{% endblock %}

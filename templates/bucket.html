@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block page %}{{title}}{% endblock %}
+{% block heading %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>{{ username }}'s Bucket List</h2>&nbsp;
+    <br>
+        <br>
+
+     <form  id="new-bucketlist" action="/bucket_new" method="post">
+        <div class="form-group row">
+        <div class="col-xs-4">
+         <div class="form-group">
+            <label for="title">Plan</label>
+            <input type="text" id="title" class="form-control" name="title">
+        </div>
+        </div>
+         <div class="col-xs-4">
+        <div  class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" class="form-control" name="description">
+        </div>
+         </div>
+        </div>
+        <button type="submit" class="btn btn-success">Create Bucket list</button>
+    </form>
+    <br>
+    <hr>
+    {% if lists|length > 0 %}
+        {% for list1 in lists %}
+            <p>{{ list1.title}}</p>
+            <p>{{list1.description}}</p>
+            <p>{{list1._id}}</p>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <h4>There aren't any posts yet!</h4>
+    {% endif %}
+</div>
+{% endblock %}

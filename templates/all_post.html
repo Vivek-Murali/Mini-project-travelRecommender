@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block page %}{{title}}{% endblock %}
+{% block heading %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+
+    <h2 style="text-aline:center; font-family: Rockwell">Timeline</h2><br/><br/>
+
+    {% if posts|length > 0 %}
+        {% for post in posts %}
+
+            <div class="col-md-9 col-md-offset-1 well" style="background-color: white">
+            <img src="{{ avatars.gravatar(post.picture, size=30)  }}" >
+            <p style="color: dodgerblue">{{ post.username}}</p>
+                <p><span style="color:blue; font-size:15pt">#</span>&nbsp;{{post.topic_name}}</p>
+                <p><span style="color:black; font-size:10pt; font-style:solid">Description:</span>&nbsp;{{post.description}}</p>
+                <p><span style="color:black; font-size:10pt; font-style:solid">Post:</span><br>{{ post.message}}</p>
+            <p>{{post.date_posted}}</p>
+
+            </div>
+
+        {% endfor %}
+    {% else %}
+        <h4>There aren't any posts yet!</h4>
+    {% endif %}
+
+
+
+{% endblock %}

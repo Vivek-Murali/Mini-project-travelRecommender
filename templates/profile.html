@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block page %}{{title}}{% endblock %}
+{% block heading %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<br>
+<div class="container">
+    <div class="row">
+    <div class="col-xs-4"><img class="img-circle" src="{{ avatars.gravatar(picture, size = 70) }}"> <h1> {{ username }}</h1>
+       </div>
+        <div><hr>
+            <table>
+                       <tr><td>&nbsp;<a href="/edit_profile2">Edit Profile</a></td><td>&nbsp;</td><td><a href="#">Bucket-List</a></td></tr></table>
+               <nav class="col-xs-8 navbar navbar-default">
+  <div class="container-fluid">
+<table>
+      <tr>
+      <td style="text-align:center;">Posts</td>
+      <td> &nbsp;</td>
+      <td style="text-align:center;">Bucket-List Count</td>
+      <td>&nbsp; </td>
+      </tr>
+      <tr>
+      {% if posts|length > 0 %}
+          <td style="text-align:center;">{{posts|length }}</td>
+      {% else %}
+          <td style="text-align:center;">0</td>
+          {% endif %}
+          <td> </td>
+        {% if lists|length > 0 %}
+      <td style="text-align:center;">{{lists|length }}</td>
+       {% else %}
+          <td style="text-align:center;">0</td>
+          {% endif %}
+           <td> </td>
+
+
+      </tr>
+  </table>
+  </div>
+        </nav>
+    </div>
+    </div>
+        <hr style="height:2px; color:#cdd0d4;">
+<div class="row">
+    <div class="col-xs-4">
+        {% for user in users %}
+            <label>First Name:</label>
+            <p>{{ user.first_name}}</p>
+            <label>Last Name:</label>
+            <p>{{ user.last_name}}</p>
+            <label>Gender:</label>
+            <p>{{ user.gender}}</p>
+            <label>Email:</label>
+            <p>{{ user.email}}</p>
+            <label>Mobile Number:</label>
+            <p>{{ user.phone}}</p>
+            <hr>
+        {% endfor %}</div>
+<div class="col-xs-8">{% if posts|length > 0 %}
+        {% for post in posts %}
+            <img src="{{ avatars.gravatar(post.picture, size=30)  }}" >
+            <p>{{ post.username}}</p>
+            <p>{{ post.message}}</p>
+            <p>{{post.date_posted}}</p>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <h4>There aren't any posts yet!</h4>
+    {% endif %}</div>
+    </div>
+</div>
+{% endblock %}

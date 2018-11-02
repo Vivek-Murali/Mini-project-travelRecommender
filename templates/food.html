@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block page %}{{title}}{% endblock %}
+{% block heading %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+
+    <h2 style="text-aline:center; font-family: Rockwell">Food Recomendations</h2><br/><br/>
+
+    {% if foods|length > 0 %}
+        {% for food in foods %}
+
+            <div class="col-md-9 col-md-offset-1 well" style="background-color: white">
+             <p>{{ food.Dishes}}</p>
+                <p style="color: dodgerblue">{{ food.Descrptions}}</p>
+            <p>{{food.Kind}}</p>
+
+            </div>
+
+        {% endfor %}
+    {% else %}
+        <h4>There aren't any posts yet!</h4>
+    {% endif %}
+
+
+
+{% endblock %}
