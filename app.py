@@ -10,6 +10,7 @@ from models.contact import Con
 from models.rating_op import Rating
 import folium
 from models.promo import Promotion
+from models.rating import Rating
 from models.recommend import Food
 import numpy as np
 import secrets
@@ -41,6 +42,22 @@ def index_template():
 @app.route('/contact')
 def contact_template():
     return render_template('contact.html')
+
+
+@app.route('/place_rate/<string:place>')
+def rating_template1(place):
+    places = Rating.from_place_id(place)
+    return render_template('rating1.html', places=places,username=session['username'], picture=session['picture'])
+
+
+@app.route('/Rest')
+def rating_template2():
+    return render_template('rating2.html')
+
+
+@app.route('/hotel')
+def rating_template3():
+    return render_template('rating3.html')
 
 
 @app.route('/about')
@@ -163,11 +180,12 @@ def place_map_template(city):
     oneman_sum = corr_oneman.join(rating)
     oneman_sum1 = oneman_sum.sort_values('PearsonR', ascending=False)
     oneman_sum2 = oneman_sum1.index.values.tolist()
-    place_coor = pd.DataFrame(oneman_sum2, index=np.arange(176), columns=['place_id'])
+    place_coor = pd.DataFrame(oneman_sum2, index=np.arange(160), columns=['place_id'])
     sumarry = pd.merge(place_coor, df, on='place_id')
     places = sumarry[:10]
     record = places.to_dict('records')
     Database.insert('place_rec', record)
+    foods = [p for p in Database.find(collection='place_rec', query={})]
     #sumarry = json.loads(sumarry[:10].to_json()).values()
     #places=[i for i in sum1]
     #places = Place.from_city_place(city)
@@ -180,8 +198,31 @@ def place_map_template(city):
         popup=folium.Popup(df2.iloc[i]['Location'], parse_html=True)
         folium.Marker([df2.iloc[i]['lat'], df2.iloc[i]['lon']], popup=popup, icon=icon).add_to(m)
     m.save('templates/map.html')
-    return render_template('place_map.html', places=places, username=session['username'], picture=session['picture'])
+    return render_template('place_map.html', foods=foods, username=session['username'], picture=session['picture'])
 
+
+@app.route('/place_rating/<string:place_id>', methods=['POST'])
+def place_ratings(place_id):
+    rate = request.form['name']
+    username = session['username']
+    user = User.get_by_username(username)
+    user1 = user._id
+    rating = float(place_id)
+    np.set_printoptions(precision=1)
+    q = np.random.uniform(low=1.0, high=5.0, size=1)
+    q = '%.1f'%q
+    c = np.random.randint(low=100, high=10000, size=1)
+    data = {"place_id":rating,
+            "avg_rating": q,
+            "no_of_rating": c,
+            "user_id": user1,
+            "user_rating": rate}
+    place_rating = pd.DataFrame(data, columns=["place_id", "avg_rating", "no_of_rating", "user_id", "user_rating"])
+    places = place_rating.to_dict(orient='records')
+    Database.insert('rating_place', places)
+    print(places)
+    flash("Rated Successfully", category='success')
+    return render_template('home.html', username=session['username'], picture=session['picture'])
 
 @app.route('/hotel_map/<string:city>')
 @app.route('/hotel_map')
@@ -215,6 +256,7 @@ def hotel_map_template(city):
     places = sumarry[:10]
     record = places.to_dict('records')
     Database.insert('hotel_rec', record)
+    foods = [p for p in Database.find(collection='hotel_rec', query={})]
     #sumarry = json.loads(sumarry[:10].to_json()).values()
     #places=[i for i in sum1]
     #places = Place.from_city_place(city)
@@ -227,7 +269,7 @@ def hotel_map_template(city):
         popup=folium.Popup(df2.iloc[i]['Location'], parse_html=True)
         folium.Marker([df2.iloc[i]['lat'], df2.iloc[i]['lon']], popup=popup, icon=icon).add_to(m)
     m.save('templates/map.html')
-    return render_template('hotel_map.html', places=places, username=session['username'], picture=session['picture'])
+    return render_template('hotel_map.html',  foods=foods,username=session['username'], picture=session['picture'])
 
 
 @app.route('/city_map1')
@@ -240,6 +282,7 @@ def city_hotel_template():
 def city_rest_template():
     cities = Cities.from_all_cities()
     return render_template('city2.html', cities=cities, username=session['username'], picture=session['picture'])
+
 
 
 @app.route('/rest_map/<string:city>')
@@ -256,11 +299,12 @@ def rest_map_template(city):
         food2 = Database.find('Rest_rating', {})
         df1 = pd.DataFrame(list(food2))
 
-    rating_count = pd.DataFrame(df1, columns=['rest_id', 'no_of_rating'])
+    rating_count = pd.DataFrame(df1, columns=['rest_id', 'no_of_rating', 'avg_rating'])
     rating_count = rating_count.sort_values('no_of_rating', ascending=False)
     rating_count1 = rating_count['rest_id'][:10]
     rating_count1 = rating_count1.values.tolist()
-    rating = pd.DataFrame(df1.groupby('rest_id')['no_of_rating'].mean())
+    rating = pd.DataFrame(df1.groupby('rest_id')['no_of_rating', 'avg_rating'].mean())
+    print(rating)
     rating.sort_values('no_of_rating', ascending=False)
     rating_pivot = pd.pivot_table(data=df1, values='user_rating', index='user_id', columns='rest_id')
     oneman = rating_pivot[rating_count1[1]]
@@ -274,6 +318,7 @@ def rest_map_template(city):
     places = sumarry[:10]
     record = places.to_dict('records')
     Database.insert('rest_rec', record)
+    foods = [p for p in Database.find(collection='rest_rec', query={})]
     #sumarry = json.loads(sumarry[:10].to_json()).values()
     #places=[i for i in sum1]
     #places = Place.from_city_place(city)
@@ -286,7 +331,7 @@ def rest_map_template(city):
         popup=folium.Popup(df2.iloc[i]['Location'], parse_html=True)
         folium.Marker([df2.iloc[i]['lat'], df2.iloc[i]['lon']], popup=popup, icon=icon).add_to(m)
     m.save('templates/map.html')
-    return render_template('rest_map.html', places=places, username=session['username'], picture=session['picture'])
+    return render_template('rest_map.html', foods=foods,username=session['username'], picture=session['picture'])
 
 
 @app.route('/city', methods = ['POST', 'GET'])
@@ -343,19 +388,20 @@ def create_new_promo():
 @app.route('/promos_list/<string:user_id>')
 @app.route('/promos')
 def promolist():
+    df =[]
     a = np.random.randint(low=1, high=10, size=10)
     a = a.tolist()
     b = secrets.choice(a)
     col1 = Database.DATABASE['promo_rec']
-    #col1.drop()
+    col1.drop()
     # foods = Food.recommend(b)
     # foods = Food.food_show()
     food_vec = TfidfVectorizer(stop_words='english')
     for food in Database.find(collection='promo', query={}).limit(1):
         food1 = Database.find(collection='promo', query={})
         df = pd.DataFrame(list(food1))
-        print(df)
 
+    print(df)
     df['descirption'] = df['description'].fillna('')
     food_td_mat = food_vec.fit_transform(df['description'])
     cos_sim = linear_kernel(food_td_mat, food_td_mat)
@@ -363,15 +409,15 @@ def promolist():
     id = indiecs[b]
     sim_score = list(enumerate(cos_sim[id]))
     sim_score = sorted(sim_score, key=lambda x: x[1], reverse=True)
-    sim_score = sim_score[1:11]
+    sim_score = sim_score[1:5]
     food_index = [i[0] for i in sim_score]
-    foods = df.iloc[food_index]
-    food = json.loads(df.iloc[food_index].T.to_json()).values()
-    Database.insert('promo_rec', food)
-    foods1=col1.insert(food)
+    food = df.iloc[food_index]
+    #food = json.loads(df.iloc[food_index].T.to_json()).values()
+    record = food.to_dict('records')
+    Database.insert('promo_rec', record)
     #topics = [p for p in Database.find(collection='promo_rec', query={})]
     #topics = foods['description','agencyname', 'mobile']
-    print(foods1)
+    foods = [p for p in Database.find(collection='promo_rec', query={})]
     return render_template("travel.html", foods=foods, username=session['username'], picture=session['picture'])
 
 
@@ -420,6 +466,11 @@ def login_user():
 def logout_user():
     User.logout()
     return render_template('index.html')
+
+
+@app.route('/public_travel')
+def public_template():
+    return render_template('public_travel.html',username=session['username'], picture=session['picture'])
 
 
 @app.route('/auth_register', methods=['POST'])

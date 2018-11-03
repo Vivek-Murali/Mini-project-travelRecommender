@@ -18,7 +18,20 @@
 <div id="mapid">{% include "map.html" %}</div>
     <div>
         <h3>List of Recommeded Hotels</h3>
-        {{places.to_html(classes="table table-striped", columns=["Location"] , index = False,border = 0, header = False) | safe}}
+        {% if foods|length > 0 %}
+        {% for food in foods %}
+
+            <div class="col-md-9 col-md-offset-1 well" style="background-color: white">
+             <p>{{ food.Location}}</p>
+                <p style="color: dodgerblue">{{ food.Place}}</a></p>
+            <p>{{food.City}}</p>
+
+            </div>
+
+        {% endfor %}
+    {% else %}
+        <h4>There aren't any posts yet!</h4>
+    {% endif %}
     </div>
     <script>
     var mymap = L.map('mapid').setView([51.505, -0.09], 13);

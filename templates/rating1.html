@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block page %}{{title}}{% endblock %}
+{% block heading %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+<br/>
+    <br/>
+<div class="row">
+    <h1><strong>Rate the Place</strong></h1><br/><br/>
+    <div class="col-md-4 col-sm-4 col-xs-12"></div>
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        {% for city in places %}
+    <form class="form-container" id="con-form" action="/place_rating/{{city.place_id}}" method="post">
+        <div class="form-group">
+            <label for="name">Place Name: {{city.Place}}</label>
+            <input type="text" id="name" class="form-control" name="name">
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+        </div>
+    <div class="col-md-4 col-sm-4 col-xs-12"></div>
+
+</div>
+
+    </form>
+
+    </div>
+
+{% endblock %}
+
